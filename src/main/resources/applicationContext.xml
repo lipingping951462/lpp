@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+           http://www.springframework.org/schema/context    
+          http://www.springframework.org/schema/context/spring-context-2.5.xsd
+           http://www.springframework.org/schema/tx 
+           http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+<!--  <aop:aspectj-autoproxy></aop:aspectj-autoproxy>-->
+<!-- <context:component-scan base-package= "fragment" />   -->
+<!--配置数据源 -->
+
+     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+         destroy-method="close">
+         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+         <property name="url"
+             value="jdbc:mysql://127.0.0.1:3306/userdb?useUnicode=true&amp;characterEncoding=UTF-8" />
+         <property name="username" value="root" />
+         <property name="password" value="lpp" />
+         <!-- 连接池启动时的初始值 -->
+         <property name="initialSize" value="1" />
+         <!-- 连接池的最大值 -->
+         <property name="maxActive" value="300" />
+         <!-- 最大空闲值.当经过一个高峰时间后，连接池可以慢慢将已经用不到的连接慢慢释放一部分，一直减少到maxIdle为止 -->
+         <property name="maxIdle" value="2" />
+         <!--  最小空闲值.当空闲的连接数少于阀值时，连接池就会预申请去一些连接，以免洪峰来时来不及申请 -->
+         <property name="minIdle" value="1" />
+     </bean>
+     <!--
+         采用注解方式来配置事务。针对数据源的事务管理器
+         ，把我们定义的数据源注入到DataSourceTransactionManager类的属性dataSource中
+     -->
+     <bean id="txManager"
+         class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+         <property name="dataSource" ref="dataSource" />
+     </bean>
+     
+     <bean id = "jdbcTemplate"    
+         class = "org.springframework.jdbc.core.JdbcTemplate">    
+         <property name = "dataSource" ref="dataSource"/>    
+    </bean>   
+  
+     <!--
+         引入命名空间： 1.xmlns:tx="http://www.springframework.org/schema/tx
+         2.http://www.springframework.org/schema/tx
+         http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+         采用@Transaction注解方式使用事务管理器
+     -->
+     <tx:annotation-driven transaction-manager="txManager" />
+ 
+     <!-- 配置业务bean：PersonServiceBean -->
+     <bean id="userDao" class="dao.UserDao">
+         <!-- 向属性dataSource注入数据源 -->
+          <property name="dataSource" ref="dataSource"></property>
+         <!-- <property name="jdbcTemplate" ref="jdbcTemplate"/> -->
+     </bean>
+     
+     <!--定义验证器-->
+        <bean id="loginValidator" class="validate.LoginValidator"></bean>
+
+        <!---定义Action-->
+        <bean id="loginAction" class="controller.LoginControll">
+                   <property name="commandClass">
+                               <value>forms.LoginForm</value>
+                   </property>
+                   <!--指定验证类-->
+                   <property name="validator">
+                                 <ref local="loginValidator"></ref>
+
+                   </property>
+                   <!-- 指定失败要返回的页面 -->
+                   <property name="formView">
+                               <value>login</value>
+                  </property>
+                  <!-- 指定成功要返回的页面 -->
+                  <property name="successView">
+                             <value>index</value>
+                  </property>
+         </bean>
+<!--  
+<bean id="loginDao" class="dao.LoginDaoImpl"></bean>
+<bean id="loginManager" class="Manager.LoginManagerImpl">
+<property name="ldao" ref="loginDao"></property>
+</bean>
+<bean name="/login" class="action.LoginAction">
+<property name="lm" ref="loginManager"></property>
+</bean>
+-->
+ 
+</beans>
