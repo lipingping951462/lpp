@@ -32,14 +32,18 @@
          <!--  最小空闲值.当空闲的连接数少于阀值时，连接池就会预申请去一些连接，以免洪峰来时来不及申请 -->
          <property name="minIdle" value="1" />
      </bean>
+     <tx:annotation-driven transaction-manager="transactionManager"/> 
      <!--
          采用注解方式来配置事务。针对数据源的事务管理器
          ，把我们定义的数据源注入到DataSourceTransactionManager类的属性dataSource中
-     -->
-     <bean id="txManager"
+         采用@Transaction注解方式使用事务管理器
+         <bean id="txManager"
          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
          <property name="dataSource" ref="dataSource" />
      </bean>
+         <tx:annotation-driven transaction-manager="txManager" />
+     -->
+     
      
      <bean id = "jdbcTemplate"    
          class = "org.springframework.jdbc.core.JdbcTemplate">    
@@ -50,40 +54,44 @@
          引入命名空间： 1.xmlns:tx="http://www.springframework.org/schema/tx
          2.http://www.springframework.org/schema/tx
          http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
-         采用@Transaction注解方式使用事务管理器
+         
      -->
-     <tx:annotation-driven transaction-manager="txManager" />
+     
  
      <!-- 配置业务bean：PersonServiceBean -->
      <bean id="userDao" class="dao.UserDao">
          <!-- 向属性dataSource注入数据源 -->
-          <property name="dataSource" ref="dataSource"></property>
-         <!-- <property name="jdbcTemplate" ref="jdbcTemplate"/> -->
+        <!--   <property name="dataSource" ref="dataSource"></property> -->
+         <property name="jdbcTemplate" ref="jdbcTemplate"/>
      </bean>
      
-     <!--定义验证器-->
+      <!-- 配置业务bean：PersonServiceBean -->
+     <bean id="adminDao" class="dao.AdmainDao">
+         <!-- 向属性dataSource注入数据源 -->
+          <!--<property name="dataSource" ref="dataSource"></property> -->
+         <property name="jdbcTemplate" ref="jdbcTemplate"/> 
+     </bean>
+     
+     
+
+<!--  
         <bean id="loginValidator" class="validate.LoginValidator"></bean>
 
-        <!---定义Action-->
         <bean id="loginAction" class="controller.LoginControll">
                    <property name="commandClass">
                                <value>forms.LoginForm</value>
                    </property>
-                   <!--指定验证类-->
                    <property name="validator">
                                  <ref local="loginValidator"></ref>
 
                    </property>
-                   <!-- 指定失败要返回的页面 -->
                    <property name="formView">
                                <value>login</value>
                   </property>
-                  <!-- 指定成功要返回的页面 -->
                   <property name="successView">
                              <value>index</value>
                   </property>
          </bean>
-<!--  
 <bean id="loginDao" class="dao.LoginDaoImpl"></bean>
 <bean id="loginManager" class="Manager.LoginManagerImpl">
 <property name="ldao" ref="loginDao"></property>

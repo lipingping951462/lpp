@@ -18,7 +18,9 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.DispatcherType;
 
@@ -27,6 +29,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
 
@@ -72,7 +75,14 @@ public class SampleWebJspApplication extends SpringBootServletInitializer {
 	}
 
 	public static void main(String[] args) throws Exception {
-		SpringApplication.run(SampleWebJspApplication.class, args);
+		SpringApplication springApplication=new SpringApplication(SampleWebJspApplication.class);
+		springApplication.setWebEnvironment(true);  
+		springApplication.setShowBanner(false);  
+        Set<Object> set = new HashSet<Object>();  
+//        set.add("classpath:application.properties");
+        set.add("classpath:applicationContext.xml");  
+        springApplication.setSources(set);
+        springApplication.run(args);
 	}
 
 }

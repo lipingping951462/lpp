@@ -1,16 +1,10 @@
 package controller;
 
-import java.beans.Transient;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import org.hibernate.validator.internal.util.privilegedactions.NewSchema;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.jdbc.core.JdbcTemplate;
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import util.FileManager;
-import util.FileProperties;
 import util.MD5;
 import util.SystemContext;
 import dao.UserDao;
@@ -28,14 +21,15 @@ import exception.MyException;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-	public static UserDao userdao = null;
+	@Resource
+	public UserDao userdao;
 
-	static {
-		ApplicationContext act = new ClassPathXmlApplicationContext(
-				"applicationContext.xml");
-		userdao = (UserDao) act.getBean("userDao");
-		userdao.setJdbcTemplate(new JdbcTemplate(userdao.getDataSource()));
-	}
+//	static {
+//		ApplicationContext act = new ClassPathXmlApplicationContext(
+//				"applicationContext.xml");
+//		userdao = (UserDao) act.getBean("userDao");
+//		userdao.setJdbcTemplate(new JdbcTemplate(userdao.getDataSource()));
+//	}
 
 	@RequestMapping("/searchuser")
 	@Transactional(propagation = Propagation.NOT_SUPPORTED, rollbackFor = Exception.class, readOnly = true)

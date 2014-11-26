@@ -9,6 +9,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import entity.Admin;
 import util.SystemContext;
 
 public class PagerFilter extends AbstractFilter {
@@ -22,7 +23,12 @@ public class PagerFilter extends AbstractFilter {
 			SystemContext.setPagenoLocal(this.getOffset(req));
 			SystemContext.setPagesizeLocal(this.getPagesize(req));
 			System.out.println("PagerFilter-------------");
-			
+			Admin admin=(Admin)req.getSession().getAttribute("loginUser");
+			System.out.println("admin----"+admin);
+			if(null==admin){
+				System.out.println("admin is null");
+				req.getRequestDispatcher("/login").forward(req, res);
+			}
 			chain.doFilter(req, res);
 		} catch (Exception e) {
 			e.printStackTrace();
