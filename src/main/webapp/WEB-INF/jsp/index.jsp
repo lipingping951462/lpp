@@ -41,8 +41,7 @@ function deleteUser(id){
 <title>Insert title here</title>
 </head>
 <body>
-	<a href="aaa.html">aaa</a>
-	用户信息：
+<a href="<%=basePath %>/logout">退出</a>
 <form action="/user/searchuser">
 <div class="form-group">
 	name:<input class="form-controll"  type="text" name="name" maxlength="20"/> 
@@ -54,7 +53,7 @@ function deleteUser(id){
 	
 	<form action="/user/saveUser">
 	<div class="form-group">
-	id:	<input class="form-controll"  type="text" name="id"> 
+
 		name:<input class="form-controll"  type="text" name="name"> 
 	password:<input class="form-controll"  type="text" name="password">
 
