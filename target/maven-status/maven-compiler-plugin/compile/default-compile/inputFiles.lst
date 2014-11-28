@@ -19,6 +19,7 @@
 /home/lpp/下载/spring-boot-master/spring-boot-samples/spring-boot-sample-web-jsp/src/main/java/exception/MyException.java
 /home/lpp/下载/spring-boot-master/spring-boot-samples/spring-boot-sample-web-jsp/src/main/java/util/AddFIle.java
 /home/lpp/下载/spring-boot-master/spring-boot-samples/spring-boot-sample-web-jsp/src/main/java/dao/UserRowMapper.java
+/home/lpp/下载/spring-boot-master/spring-boot-samples/spring-boot-sample-web-jsp/src/main/java/config/AppContextManager.java
 /home/lpp/下载/spring-boot-master/spring-boot-samples/spring-boot-sample-web-jsp/src/main/java/forms/LoginForm.java
 /home/lpp/下载/spring-boot-master/spring-boot-samples/spring-boot-sample-web-jsp/src/main/java/entity/User.java
 /home/lpp/下载/spring-boot-master/spring-boot-samples/spring-boot-sample-web-jsp/src/main/java/filter/PagerFilter.java

@@ -25,20 +25,30 @@ import java.util.Set;
 import javax.servlet.DispatcherType;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
+import config.AppContextManager;
 import util.FileProperties;
 import filter.PagerFilter;
 
-@SpringBootApplication
 //@ImportResource("applicationContext.xml")
+
+@Configuration
+@EnableAutoConfiguration
+@SpringBootApplication
 public class SampleWebJspApplication extends SpringBootServletInitializer {
+//@ComponentScan
+//@EnableAutoConfiguration
+//public class SampleWebJspApplication{
 //	@SuppressWarnings("serial")
 //	@Bean
 //	public Servlet dispatcherServlet() {
@@ -68,6 +78,11 @@ public class SampleWebJspApplication extends SpringBootServletInitializer {
 	   return  new FileProperties();
 	  }
 	
+	@Bean
+	AppContextManager AppContextManager() {
+	   return  new AppContextManager();
+	  }
+	
 	@Override
 	protected SpringApplicationBuilder configure(
 			SpringApplicationBuilder application) {
@@ -75,14 +90,28 @@ public class SampleWebJspApplication extends SpringBootServletInitializer {
 	}
 
 	public static void main(String[] args) throws Exception {
-		SpringApplication springApplication=new SpringApplication(SampleWebJspApplication.class);
-		springApplication.setWebEnvironment(true);  
-		springApplication.setShowBanner(false);  
-        Set<Object> set = new HashSet<Object>();  
+		System.out.println("main  begin---------------------");
+//		SpringApplication springApplication=new SpringApplication(SampleWebJspApplication.class);
+//		springApplication.setWebEnvironment(true);  
+//		springApplication.setShowBanner(false);  
+//        Set<Object> set = new HashSet<Object>();  
 //        set.add("classpath:application.properties");
-        set.add("classpath:applicationContext.xml");  
-        springApplication.setSources(set);
-        springApplication.run(args);
+//        set.add("classpath:applicationContext.xml");  
+//        springApplication.setSources(set);
+//        ApplicationContext ctx = springApplication.run(args);
+		
+		ApplicationContext ctx = 	 new SpringApplicationBuilder(Parent.class).child(SampleWebJspApplication.class).run(args);
+        String[] names=ctx.getBeanDefinitionNames();
+        System.out.println("main  end---------------------");
+        for(String name:names){
+        	System.out.println(name);
+        }
+	}
+	
+	@EnableAutoConfiguration
+	@ImportResource("applicationContext.xml")
+	protected static class Parent {
+
 	}
 
 }

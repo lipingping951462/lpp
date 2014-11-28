@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import entity.User;
 
-@Component
 public class UserDao {
 
 	private DataSource dataSource;
@@ -35,14 +34,14 @@ public class UserDao {
 	// this.jdbcTemplate=new JdbcTemplate(this.getDataSource());
 	// }
 
-//	@Autowired
-//	public UserDao(JdbcTemplate jdbcTemplate) {
-//		this.jdbcTemplate = jdbcTemplate;
-//	}
-//
-//	public UserDao() {
-//
-//	}
+	// @Autowired
+	// public UserDao(JdbcTemplate jdbcTemplate) {
+	// this.jdbcTemplate = jdbcTemplate;
+	// }
+	//
+	// public UserDao() {
+	//
+	// }
 
 	// public JdbcTemplate getMYJdbcTemplate() {
 	// if (jdbcTemplate == null) {
@@ -51,7 +50,7 @@ public class UserDao {
 	// return jdbcTemplate;
 	// }
 	//
-//	@Bean
+	// @Bean
 	// @ConfigurationProperties(prefix="spring.datasource")
 	// public DataSource getDataSource() {
 	// // dataSource=new BasicDataSource();
@@ -238,6 +237,21 @@ public class UserDao {
 					new Object[] { user.getName(), user.getPassword(),
 							user.getId() }, new int[] { java.sql.Types.VARCHAR,
 							java.sql.Types.VARCHAR, java.sql.Types.INTEGER });
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+	}
+
+	public boolean updateUserName(User user) {
+		try {
+			jdbcTemplate.update(
+					"update users set name=? where id=?",
+					new Object[] { user.getName(),
+							user.getId() }, new int[] { java.sql.Types.VARCHAR,
+							java.sql.Types.INTEGER });
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;

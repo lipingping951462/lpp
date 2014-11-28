@@ -21,7 +21,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 管理员登录：
 <br/>
 ${errormessage }
-<spring:form action="/login" method="post" modelAttribute="admin">
+<spring:form action="/login"  method="post" modelAttribute="admin">
 	<div class="form-group">
 姓名：<spring:input class="form-controll"  path="name"/><spring:errors path="name"/><br/>
 密码：<spring:input class="form-controll"   path="password"/><spring:errors path="password"/><br/>

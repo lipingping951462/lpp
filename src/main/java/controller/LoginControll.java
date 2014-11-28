@@ -1,6 +1,7 @@
 package controller;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,8 @@ public class LoginControll {
 	private AdmainDao adminDao;
 	@Resource
 	private UserDao userdao;
+	
+	private static String path="";
 
 	// @RequestMapping("/login")
 	// public String login(@RequestParam(value="name") String
@@ -52,7 +55,8 @@ public class LoginControll {
 	// }
 
 	@RequestMapping(value="/login", method=RequestMethod.GET)
-	public String loginbegin(Model model) {
+	public String loginbegin(Model model,HttpServletRequest req) {
+//		path=req.getContextPath();
 		model.addAttribute(new Admin());
 		return "login";
 	}
@@ -71,7 +75,8 @@ public class LoginControll {
 		Admin admin = adminDao.getAdmin(name, md5pass);
 		if (null!=admin) {
 			model.addAttribute("loginUser",admin);
-			return "redirect:/user/searchuser";
+			
+			return "redirect:"+path+"/user/searchuser";
 		}
 ////		userdao.getAllUser(0, 10);
 //		adminentiry.setMessage("密码错误");
@@ -82,7 +87,7 @@ public class LoginControll {
 	@RequestMapping("/logout")
 	public String login(Model model) {
 		model.asMap().remove("loginUser");
-		return "redirect:/login";
+		return "redirect:"+path+"/login";
 	}
 	
 //	public ModelAndView onSubmit(Object cmd, BindException errors) {  

@@ -25,7 +25,7 @@ function updateUser(id){
 		var id = tr.find('input[ID$=id]').val();
 		var name=tr.find('input[ID$=name]').val();
 		var password=tr.find('input[ID$=password]').val();
-		location.href = "updateUser?id="+id+"&name="+name+"&password="+password;
+		location.href = "/user/updateUser?id="+id+"&name="+name+"&password="+password;
 	
 	}
 	
@@ -33,7 +33,7 @@ function deleteUser(id){
 	var tr = $("tr[id=" + id + "]"); 
 		var id = tr.find('input[ID$=id]').val();
 		var name=tr.find('input[ID$=name]').val();
-		location.href = "deleteUser?id="+id+"&name="+name;
+		location.href = "/user/deleteUser?id="+id+"&name="+name;
 	}
 
 </script>
@@ -41,7 +41,7 @@ function deleteUser(id){
 <title>Insert title here</title>
 </head>
 <body>
-<a href="<%=basePath %>/logout">退出</a>
+<a href="<%=basePath %>logout">退出</a>
 <form action="/user/searchuser">
 <div class="form-group">
 	name:<input class="form-controll"  type="text" name="name" maxlength="20"/> 
@@ -51,7 +51,7 @@ function deleteUser(id){
 
 	</form>
 	
-	<form action="/user/saveUser">
+	<form action="<%=basePath %>user/saveUser">
 	<div class="form-group">
 
 		name:<input class="form-controll"  type="text" name="name"> 
@@ -75,7 +75,7 @@ function deleteUser(id){
         <tr  class="active" id='${user.id}'>
 	<td><input   type="text"  class="form-controll"  id="userid"  name="userid" value="${user.id}" readonly></input></td>
 	<td><input type="text"  id=" username"  name="username" value="${user.name}"></input> </td>
-	<td><input type="text"  id="password" name="password" value="${user.password}"></input></td>
+	<td><input type="text"  id="password" size="34"  name="password"   value="${user.password}"></input></td>
 	<td><intput class="btn btn-default"   onclick="javascript:deleteUser('${user.id}')"  type="button">删除</intput> <input class="btn btn-default" type="button"  onclick="javascript:updateUser('${user.id}')"  value=
 	"更新">  </td>
 	</tr>

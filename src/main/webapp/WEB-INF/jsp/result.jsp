@@ -12,10 +12,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 %>
 </head>
 <body>
-isupdate :${isupdate}<br>
-isdelete:${isdelete}<br>
+isupdate :${isupdate} id:${id} name:${name} password:${password}<br>
+isdelete:${isdelete}<br> 
 issave:${issave}<br>
 
-<a href="<%=basePath %>/user/searchuser">返回</a>
+<a href="/user/searchuser">返回</a>
 </body>
 </html>

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import entity.Admin;
 import entity.User;
 
-@Component
 public class AdmainDao {
 	private DataSource dataSource = null;
 	private JdbcTemplate jdbcTemplate;

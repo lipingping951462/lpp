@@ -24,12 +24,12 @@ public class UserController {
 	@Resource
 	public UserDao userdao;
 
-//	static {
-//		ApplicationContext act = new ClassPathXmlApplicationContext(
-//				"applicationContext.xml");
-//		userdao = (UserDao) act.getBean("userDao");
-//		userdao.setJdbcTemplate(new JdbcTemplate(userdao.getDataSource()));
-//	}
+	// static {
+	// ApplicationContext act = new ClassPathXmlApplicationContext(
+	// "applicationContext.xml");
+	// userdao = (UserDao) act.getBean("userDao");
+	// userdao.setJdbcTemplate(new JdbcTemplate(userdao.getDataSource()));
+	// }
 
 	@RequestMapping("/searchuser")
 	@Transactional(propagation = Propagation.NOT_SUPPORTED, rollbackFor = Exception.class, readOnly = true)
@@ -112,16 +112,26 @@ public class UserController {
 	public String updateUser(@RequestParam("name") String name,
 			@RequestParam("id") String id,
 			@RequestParam("password") String password, Map<String, Object> model) {
+		String pass = "";
+		Boolean isupdate = false;
+		if (null != password & !"".equals(password)) {
+			if (password.length() <20) {
+				pass = MD5.GetMD5Code(password);
+			}
+		}
 
-		String pass=MD5.GetMD5Code(password);
 		String oldname = userdao.getUserNameById(id);
 		User user = new User();
 		user.setId(id);
 		user.setName(name);
-		user.setPassword(pass);
-		Boolean isupdate = userdao.updateUser(user);
+		if ("".equals(pass)) {
+			isupdate = userdao.updateUserName(user);
+		} else {
+			user.setPassword(pass);
+			isupdate = userdao.updateUser(user);
+		}
 		if (isupdate) {
-			
+
 			// 修改文件
 			try {
 				FileManager.updateFile(oldname, name);
@@ -132,6 +142,11 @@ public class UserController {
 		}
 
 		model.put("isupdate", isupdate);
+		model.put("id", id);
+		model.put("name", name);
+		if (!"".equals(pass)) {
+			model.put("password", password);
+		}
 		return "result";
 	}
 
@@ -139,7 +154,7 @@ public class UserController {
 	public String deleteUser(@RequestParam("id") String id, String name,
 			Map<String, Object> model) {
 		Boolean isdelete = userdao.deleteUser(id);
-		if(isdelete){
+		if (isdelete) {
 			try {
 				FileManager.deleteFile(name);
 			} catch (MyException e) {
@@ -147,7 +162,7 @@ public class UserController {
 				e.printStackTrace();
 			}
 		}
-			
+
 		model.put("isdelete", isdelete);
 		return "result";
 	}
@@ -155,16 +170,15 @@ public class UserController {
 	@RequestMapping("/saveUser")
 	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
 	public String saveUser(@RequestParam("name") String name,
-			@RequestParam("id") String id,
 			@RequestParam("password") String password, Map<String, Object> model)
 			throws MyException {
-		String pass=MD5.GetMD5Code(password);
+		String pass = MD5.GetMD5Code(password);
 		User user = new User();
-		user.setId(id);
+//		user.setId(id);
 		user.setName(name);
 		user.setPassword(pass);
 		Boolean issave = userdao.saveUser(user);
-		if(issave){
+		if (issave) {
 			FileManager.addFile(name);
 		}
 		model.put("issave", issave);
